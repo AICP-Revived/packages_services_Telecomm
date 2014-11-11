@@ -22,6 +22,7 @@ import android.app.Person;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.os.VibrationEffect;
+import android.provider.Settings;
 import android.telecom.Log;
 import android.telecom.TelecomManager;
 import android.media.AudioAttributes;
@@ -316,12 +317,12 @@ public class Ringer {
                         mVolumeShaperConfig, isVibratorEnabled);
             } else {
                 final ContentResolver cr = mContext.getContentResolver();
-                if (LineageSettings.System.getInt(cr,
-                        LineageSettings.System.INCREASING_RING, 0) != 0) {
-                    float startVolume = LineageSettings.System.getFloat(cr,
-                            LineageSettings.System.INCREASING_RING_START_VOLUME, 0.1f);
-                    int rampUpTime = LineageSettings.System.getInt(cr,
-                            LineageSettings.System.INCREASING_RING_RAMP_UP_TIME, 20);
+                if (Settings.System.getInt(cr,
+                        Settings.System.INCREASING_RING, 0) != 0) {
+                    float startVolume = Settings.System.getFloat(cr,
+                            Settings.System.INCREASING_RING_START_VOLUME, 0.1f);
+                    int rampUpTime = Settings.System.getInt(cr,
+                            Settings.System.INCREASING_RING_RAMP_UP_TIME, 20);
                     if (mVolumeShaperConfig == null
                         || mRampingRingerDuration != rampUpTime
                         || mRampingRingerStartVolume != startVolume) {
@@ -339,6 +340,7 @@ public class Ringer {
                 hapticsFuture = mRingtonePlayer.play(mRingtoneFactory, foregroundCall,
                         mVolumeShaperConfig, isVibratorEnabled);
                 effect = getVibrationEffectForCall(mRingtoneFactory, foregroundCall);
+
             }
         } else {
             String reason = String.format(
